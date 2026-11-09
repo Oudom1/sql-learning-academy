@@ -37,7 +37,9 @@ jobs:
       - name: Prepare static website
         run: |
           mkdir -p site
-          cp index.html site/index.html
+          cp index.html practice.js site/
+          test -s site/index.html
+          test -s site/practice.js
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
