@@ -9,3 +9,14 @@ assert(html.includes('window.print()'),'PDF save action missing');
 assert(html.includes('localStorage.setItem'),'certificate persistence missing');
 assert(html.includes('get(\'view\').classList.toggle(\'hidden\',score<80)'),'certificate should not show for failed exams');
 console.log('PASS: JavaScript syntax, three exam levels, 80% pass logic, certificate persistence, print-to-PDF and failure gating.');
+
+const practice=fs.readFileSync('practice.js','utf8');
+new vm.Script(practice,{filename:'practice.js'});
+assert(html.includes('id="practice"'),'SQL practice UI must be present');
+assert(html.includes('src="practice.js"'),'SQL lab must load its script');
+assert(practice.includes('initSqlJs'),'SQLite runtime must initialize');
+assert(practice.includes('function execute(query)'),'SQL query runner must exist');
+assert(practice.includes('function same(a,b)'),'SQL answer comparison must exist');
+const workflow=fs.readFileSync('.github/workflows/pages.yml','utf8');
+assert(workflow.includes('cp index.html practice.js site/'),'deployment must include SQL lab script');
+console.log('PASS: SQL lab syntax, query execution, answer grading and deploy artifact checks.');
