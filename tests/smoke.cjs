@@ -1,0 +1,11 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const html=fs.readFileSync('index.html','utf8');
+const js=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+assert(js,'inline script must exist');
+new vm.Script(js,{filename:'academy.js'});
+for(const level of ['basic','intermediate','advanced'])assert(html.includes(level+':{'),level+' exam missing');
+assert(html.includes('score>=80'),'80% pass threshold missing');
+assert(html.includes('window.print()'),'PDF save action missing');
+assert(html.includes('localStorage.setItem'),'certificate persistence missing');
+assert(html.includes('get(\'view\').classList.toggle(\'hidden\',score<80)'),'certificate should not show for failed exams');
+console.log('PASS: JavaScript syntax, three exam levels, 80% pass logic, certificate persistence, print-to-PDF and failure gating.');
